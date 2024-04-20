@@ -1,6 +1,6 @@
-package Entity;
+package entity.person;
 
-public class Person implements IPerson {
+public abstract class Person implements IPerson {
     private final int YEAR = 2024;
 
     private String name;
@@ -10,10 +10,11 @@ public class Person implements IPerson {
     private String address;
     private String mobileNumber;
     private String email;
+    private String password;
 
     public Person() {}
 
-    public Person(String name, String nid, int birthYear, String address, String mobileNumber, String email) {
+    public Person(String name, String nid, int birthYear, String address, String mobileNumber, String email, String password) {
         setName(name);
         setNid(nid);
         setBirthYear(birthYear);
@@ -21,6 +22,7 @@ public class Person implements IPerson {
         setAddress(address);
         setMobileNumber(mobileNumber);
         setEmail(email);
+        setPassword(password);
     }
    
     public void setName(String name) {
@@ -54,6 +56,10 @@ public class Person implements IPerson {
     public String getName() {
         return this.name;
     }
+
+    public String setPassword(String password) {
+        return this.password = password;
+    }
     
     public String getNid() {
         return this.nid;
@@ -77,5 +83,9 @@ public class Person implements IPerson {
 
     public String getEmail() {
         return this.email;
+    }
+
+    public String getPassword() {
+        return this.password;
     }
 }

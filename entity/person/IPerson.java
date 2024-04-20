@@ -1,3 +1,5 @@
+package entity.person;
+
 interface IPerson {
     void setName(String name);
     void setNid(String nid);
