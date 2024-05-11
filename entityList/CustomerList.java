@@ -56,6 +56,21 @@ public class CustomerList {
         return account;
     }
 
+    public Customer getCustomerByAccountNumber(int accountNumber) {
+        Customer customer = null;
+        for (int i = 0; i < customerList.size(); i++) {
+            
+            ArrayList <Account> accounts = customerList.get(i).getAccounts();
+            for (int j = 0; j < accounts.size(); j++) {
+                if (accounts.get(j).getAccountNumber() == accountNumber) {
+                    customer = customerList.get(i);
+                }
+            }
+        }
+
+        return customer;
+    }
+
     
     public void removeAccount(int accountNumber) {
         for (int i = 0; i < customerList.size(); i++) {

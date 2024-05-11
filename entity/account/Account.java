@@ -26,5 +26,26 @@ public abstract class Account {
 	public double getBalance(){
         return this.balance;
     }
+
+	public boolean deposit(double amount){
+		if (amount > 0) {
+			this.balance += amount;
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean withdraw(double amount){
+		if (this.balance >= amount) {
+			this.balance -= amount;
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	
 }

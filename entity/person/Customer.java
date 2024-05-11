@@ -27,8 +27,20 @@ public class Customer extends Person {
         }
     }
 
-    public ArrayList getAccounts() {
+    public ArrayList<Account> getAccounts() {
         return accounts;
+    }
+
+    public Account getAccount(int accountNumber) {
+        Account account = null;
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts.get(i).getAccountNumber() == accountNumber) {
+                account = accounts.get(i);
+                break;
+            }
+        }
+
+        return account;
     }
 
 }
