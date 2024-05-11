@@ -94,7 +94,7 @@ public class CashierDashboard extends JFrame implements ActionListener{
 
     JLabel secL, accountNumL, accountNameL, balanceL, amountL, msgL, newBalanceL;
     JTextField accountNumT, accountNameT, balanceT, amountT, newBalanceT;
-    JButton WDinitiateBtn, WconfirmBtn, DconfirmBtn, exitBtn, cancelBtn;
+    JButton WDinitiateBtn, WconfirmBtn, DconfirmBtn, exitBtn, cancelBtn, cBalanceBtn;
     
     int accountNumber;
     Customer customer;
@@ -234,9 +234,9 @@ public class CashierDashboard extends JFrame implements ActionListener{
             // Withdraw Confirm Button
             if (pressedBtn.equals("withdraw")) {
                 WconfirmBtn = new JButton("Confirm");
-                WconfirmBtn.setBounds(310, 480, 530, 40);
+                WconfirmBtn.setBounds(310, 480, 255, 40);
                 WconfirmBtn.setFont(font20);
-                WconfirmBtn.setBackground(Color.RED);
+                WconfirmBtn.setBackground(Color.GREEN);
                 WconfirmBtn.setForeground(Color.WHITE);
                 WconfirmBtn.addActionListener(this);
                 this.add(WconfirmBtn);
@@ -245,13 +245,22 @@ public class CashierDashboard extends JFrame implements ActionListener{
             // Deposit Confirm Button
             else if (pressedBtn.equals("deposit")) {
                 DconfirmBtn = new JButton("Confirm");
-                DconfirmBtn.setBounds(310, 480, 530, 40);
+                DconfirmBtn.setBounds(310, 480, 255, 40);
                 DconfirmBtn.setFont(font20);
-                DconfirmBtn.setBackground(Color.RED);
+                DconfirmBtn.setBackground(Color.BLUE);
                 DconfirmBtn.setForeground(Color.WHITE);
                 DconfirmBtn.addActionListener(this);
                 this.add(DconfirmBtn);
             }
+
+            // Cancel Button
+            cancelBtn = new JButton("Cancel");
+            cancelBtn.setBounds(580, 480, 258, 40);
+            cancelBtn.setFont(font20);
+            cancelBtn.setBackground(Color.RED);
+            cancelBtn.setForeground(Color.WHITE);
+            cancelBtn.addActionListener(this);
+            this.add(cancelBtn);
 
             this.update(getGraphics());
         }
@@ -331,6 +340,99 @@ public class CashierDashboard extends JFrame implements ActionListener{
             exitBtn.setForeground(Color.WHITE);
             exitBtn.addActionListener(this);
             this.add(exitBtn);
+
+            this.update(getGraphics());
+        }
+
+        else if (e.getSource() == checkBalanceBtn) {
+            checkBalanceBtn.setBackground(Color.GRAY);
+
+            // Section title
+            secL = new JLabel("CHECK BALANCE");
+            secL.setBounds(500, 270, 222, 36);
+            secL.setFont(font20b);
+            this.add(secL);
+
+            // Label for account number 
+            accountNumL = new JLabel("Account Number");
+            accountNumL.setBounds(310, 315, 530, 25);
+            accountNumL.setFont(font16b);
+            this.add(accountNumL);
+
+            // Text field for account number
+            accountNumT = new JTextField();
+            accountNumT.setBounds(310, 340, 530, 40);
+            accountNumT.setFont(font20);
+            this.add(accountNumT);
+
+            // Check balance Button
+            cBalanceBtn = new JButton("Check Balance");
+            cBalanceBtn.setBounds(310, 395, 255, 40);
+            cBalanceBtn.setFont(font20);
+            cBalanceBtn.setBackground(Color.BLUE);
+            cBalanceBtn.setForeground(Color.WHITE);
+            cBalanceBtn.addActionListener(this);
+            this.add(cBalanceBtn);
+
+            // Cancel Button
+            cancelBtn = new JButton("Cancel");
+            cancelBtn.setBounds(580, 395, 260, 40);
+            cancelBtn.setFont(font20);
+            cancelBtn.setBackground(Color.RED);
+            cancelBtn.setForeground(Color.WHITE);
+            cancelBtn.addActionListener(this);
+            this.add(cancelBtn);
+
+            this.update(getGraphics());
+        }
+
+        else if (e.getSource() == cBalanceBtn) {
+            this.remove(cBalanceBtn);
+            this.remove(cancelBtn);
+            
+            accountNumber = Integer.parseInt(accountNumT.getText());
+            customer = customerList.getCustomerByAccountNumber(accountNumber);
+            account = customer.getAccount(accountNumber);
+
+            // Label for account name 
+            accountNameL = new JLabel("Account Name");
+            accountNameL.setBounds(310, 395, 280, 25);
+            accountNameL.setFont(font16b);
+            this.add(accountNameL);
+            
+            // Text field for account name
+            accountNameT = new JTextField();
+            accountNameT.setBounds(310, 420, 280, 40);
+            accountNameT.setFont(font20);
+            accountNameT.setText(customer.getName());
+            accountNameT.setEditable(false);
+            this.add(accountNameT);
+
+            // Label for balance 
+            balanceL = new JLabel("Balance");
+            balanceL.setBounds(630, 395, 210, 25);
+            balanceL.setFont(font16b);
+            this.add(balanceL);
+
+            String balance = String.valueOf(account.getBalance());
+            
+            // Text field for balance
+            balanceT = new JTextField();
+            balanceT.setBounds(630, 420, 210, 40);
+            balanceT.setFont(font20);
+            balanceT.setText(balance);
+            balanceT.setEditable(false);
+            this.add(balanceT);
+
+            // Exit Button
+            exitBtn = new JButton("Exit");
+            exitBtn.setBounds(310, 480, 530, 40);
+            exitBtn.setFont(font20);
+            exitBtn.setBackground(Color.RED);
+            exitBtn.setForeground(Color.WHITE);
+            exitBtn.addActionListener(this);
+            this.add(exitBtn);
+
 
             this.update(getGraphics());
         }
