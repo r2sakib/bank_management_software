@@ -94,27 +94,58 @@ public class CashierDashboard extends JFrame implements ActionListener{
 
     JLabel secL, accountNumL, accountNameL, balanceL, amountL, msgL, newBalanceL;
     JTextField accountNumT, accountNameT, balanceT, amountT, newBalanceT;
-    JButton initiateBtn, confirmBtn, exitBtn;
+    JButton WDinitiateBtn, WconfirmBtn, DconfirmBtn, exitBtn, cancelBtn;
     
     int accountNumber;
     Customer customer;
     Account account;
+
+    String pressedBtn;
 	
 	public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == withdrawBtn) {
+            pressedBtn = "withdraw";
+        }
+        else if (e.getSource() == depositBtn) {
+            pressedBtn = "deposit";
+        }
+        else if (e.getSource() == transferBalanceBtn) {
+            pressedBtn = "transferBalance";
+        }
+        else if (e.getSource() == checkBalanceBtn) {
+            pressedBtn = "checkBalance";
+        }
+
+
         if(e.getSource() == logoutBtn){
             this.dispose();
         }
 
-        else if (e.getSource() == withdrawBtn) {
-            withdrawBtn.setBackground(Color.GRAY);
+        else if (e.getSource() == withdrawBtn || e.getSource() == depositBtn) {
             withdrawBtn.removeActionListener(this);
+            
+            if (e.getSource() == withdrawBtn) {
+                withdrawBtn.setBackground(Color.GRAY);
 
-            // Section title
-            secL = new JLabel("WITHDRAW");
-            secL.setBounds(530, 270, 222, 36);
-            secL.setFont(font20b);
-            this.add(secL);
+                // Section title
+                secL = new JLabel("WITHDRAW");
+                secL.setBounds(530, 270, 222, 36);
+                secL.setFont(font20b);
+                this.add(secL);
 
+                pressedBtn = "withdraw";
+            }
+            else if (e.getSource() == depositBtn) {
+                depositBtn.setBackground(Color.GRAY);
+
+                // Section title
+                secL = new JLabel("DEPOSIT");
+                secL.setBounds(530, 270, 222, 36);
+                secL.setFont(font20b);
+                this.add(secL);
+
+                pressedBtn = "deposit";
+            }
 
             // Label for account number 
             accountNumL = new JLabel("Account Number");
@@ -141,18 +172,29 @@ public class CashierDashboard extends JFrame implements ActionListener{
             this.add(amountT);
 
             // Initiate Transfer Button
-            initiateBtn = new JButton("Initate");
-            initiateBtn.setBounds(310, 395, 530, 40);
-            initiateBtn.setFont(font20);
-            initiateBtn.setBackground(Color.BLUE);
-            initiateBtn.setForeground(Color.WHITE);
-            initiateBtn.addActionListener(this);
-            this.add(initiateBtn);
+            WDinitiateBtn = new JButton("Initate");
+            WDinitiateBtn.setBounds(310, 395, 255, 40);
+            WDinitiateBtn.setFont(font20);
+            WDinitiateBtn.setBackground(Color.BLUE);
+            WDinitiateBtn.setForeground(Color.WHITE);
+            WDinitiateBtn.addActionListener(this);
+            this.add(WDinitiateBtn);
+
+            // Cancel Button
+            cancelBtn = new JButton("Cancel");
+            cancelBtn.setBounds(580, 395, 258, 40);
+            cancelBtn.setFont(font20);
+            cancelBtn.setBackground(Color.RED);
+            cancelBtn.setForeground(Color.WHITE);
+            cancelBtn.addActionListener(this);
+            this.add(cancelBtn);
 
             this.update(getGraphics());
         }
 
-        else if (e.getSource() == initiateBtn) {
+        else if (e.getSource() == WDinitiateBtn) {
+            this.remove(WDinitiateBtn);
+            this.remove(cancelBtn);
             
             accountNumber = Integer.parseInt(accountNumT.getText());
             customer = customerList.getCustomerByAccountNumber(accountNumber);
@@ -188,26 +230,48 @@ public class CashierDashboard extends JFrame implements ActionListener{
             balanceT.setEditable(false);
             this.add(balanceT);
 
-            this.remove(initiateBtn);
 
-            // Confirm Button
-            confirmBtn = new JButton("Confirm");
-            confirmBtn.setBounds(310, 480, 530, 40);
-            confirmBtn.setFont(font20);
-            confirmBtn.setBackground(Color.RED);
-            confirmBtn.setForeground(Color.WHITE);
-            confirmBtn.addActionListener(this);
-            this.add(confirmBtn);
+            // Withdraw Confirm Button
+            if (pressedBtn.equals("withdraw")) {
+                WconfirmBtn = new JButton("Confirm");
+                WconfirmBtn.setBounds(310, 480, 530, 40);
+                WconfirmBtn.setFont(font20);
+                WconfirmBtn.setBackground(Color.RED);
+                WconfirmBtn.setForeground(Color.WHITE);
+                WconfirmBtn.addActionListener(this);
+                this.add(WconfirmBtn);
+            }
+
+            // Deposit Confirm Button
+            else if (pressedBtn.equals("deposit")) {
+                DconfirmBtn = new JButton("Confirm");
+                DconfirmBtn.setBounds(310, 480, 530, 40);
+                DconfirmBtn.setFont(font20);
+                DconfirmBtn.setBackground(Color.RED);
+                DconfirmBtn.setForeground(Color.WHITE);
+                DconfirmBtn.addActionListener(this);
+                this.add(DconfirmBtn);
+            }
 
             this.update(getGraphics());
         }
 
-        else if (e.getSource() == confirmBtn) {
+        else if (e.getSource() == WconfirmBtn || e.getSource() == DconfirmBtn) {
             double amount = Double.parseDouble(amountT.getText());
-            boolean success = account.withdraw(amount);
+            boolean success = false;
 
-            this.remove(confirmBtn);
-            if (success) {
+            if (pressedBtn == "withdraw") {
+                success = account.withdraw(amount);
+                this.remove(WconfirmBtn);
+            }
+            else if (pressedBtn == "deposit") {
+                success = account.deposit(amount);
+                this.remove(DconfirmBtn);
+            }
+
+
+            // Withdraw confirmation message
+            if (e.getSource() == WconfirmBtn && success) {
                 // Message
                 msgL = new JLabel("Withdraw successful");
                 msgL.setBounds(310, 500, 280, 36);
@@ -215,9 +279,28 @@ public class CashierDashboard extends JFrame implements ActionListener{
                 msgL.setForeground(Color.GREEN);
                 this.add(msgL);
 
-            } else {
+            } else if (e.getSource() == WconfirmBtn && !success) {
                 // Message
                 msgL = new JLabel("Withdraw failed");
+                msgL.setBounds(310, 500, 280, 36);
+                msgL.setFont(font20b);
+                msgL.setForeground(Color.RED);
+                this.add(msgL);
+            }
+
+
+            // Deposit confirmation message
+            if (e.getSource() == DconfirmBtn && success) {
+                // Message
+                msgL = new JLabel("Deposit successful");
+                msgL.setBounds(310, 500, 280, 36);
+                msgL.setFont(font20b);
+                msgL.setForeground(Color.GREEN);
+                this.add(msgL);
+
+            } else if (e.getSource() == DconfirmBtn && !success) {
+                // Message
+                msgL = new JLabel("Deposit failed");
                 msgL.setBounds(310, 500, 280, 36);
                 msgL.setFont(font20b);
                 msgL.setForeground(Color.RED);
@@ -252,10 +335,11 @@ public class CashierDashboard extends JFrame implements ActionListener{
             this.update(getGraphics());
         }
        
-        else if (e.getSource() == exitBtn) {
+        else if (e.getSource() == exitBtn || e.getSource() == cancelBtn) {
             this.dispose();
             CashierDashboard cashierDashboard = new CashierDashboard(customerList);
         }
+
     }
 	
 	
