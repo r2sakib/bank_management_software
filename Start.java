@@ -13,6 +13,6 @@ public class Start {
 		FileIO.loadBankerList(bankerList);
 		FileIO.loadAccounts(customerList);
 
-		new ManagerDashboard(customerList, bankerList);
+		new LoginPage(customerList, bankerList);
 	}
 }

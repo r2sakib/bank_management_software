@@ -3,6 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.Thread;
 
 import entity.person.*;
 import entity.account.*;
@@ -10,7 +11,7 @@ import entityList.*;
 import GUI.*;
 import file.*;
 
-public class CashierDashboard extends JFrame implements ActionListener{
+public class CashierDashboard extends JFrame implements ActionListener {
     JLabel pageL;
 	JButton withdrawBtn, depositBtn, transferBalanceBtn, checkBalanceBtn, logoutBtn;
 
@@ -30,11 +31,16 @@ public class CashierDashboard extends JFrame implements ActionListener{
         this.setLayout(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        // LOGO
         ImageIcon img = new ImageIcon("./resources/logo.png");
         this.setIconImage(img.getImage());
 
         this.customerList = customerList;
         this.login = login;
+
+        // LOAD DATA
+        FileIO.loadCustomerList(customerList);
+        FileIO.loadAccounts(customerList);
         
         // Label for page title 
         pageL = new JLabel("Cashier Dashboard");
@@ -93,8 +99,8 @@ public class CashierDashboard extends JFrame implements ActionListener{
 		this.setVisible(true);	
 	}
 
-    JLabel secL, accountNumL, accountNameL, balanceL, amountL, msgL, newBalanceL, fromAccountNumL, toAccountNumL, fromAccountNameL;
-    JTextField accountNumT, accountNameT, balanceT, amountT, newBalanceT, fromAccountNumT, toAccountNumT, fromAccountNameT;
+    JLabel secL, accountNumL, accountNameL, balanceL, amountL, msgL, newBalanceL, fromAccountNumL, toAccountNumL, fromAccountNameL, toAccountNameL;
+    JTextField accountNumT, accountNameT, balanceT, amountT, newBalanceT, fromAccountNumT, toAccountNumT, fromAccountNameT, toAccountNameT;
     JButton WDinitiateBtn, WconfirmBtn, DconfirmBtn, exitBtn, cancelBtn, cBalanceBtn, tBalanceBtn, tInitiateBtn, tConfirmBtn;
     
     int accountNumber, fromAccountNumber, toAccountNumber;
@@ -109,10 +115,10 @@ public class CashierDashboard extends JFrame implements ActionListener{
             if (evt.getSource() == withdrawBtn) {
                 pressedBtn = "withdraw";
             }
+            
             else if (evt.getSource() == depositBtn) {
                 pressedBtn = "deposit";
             }
-    
     
             if(evt.getSource() == logoutBtn){
                 this.dispose();
@@ -192,7 +198,6 @@ public class CashierDashboard extends JFrame implements ActionListener{
     
             else if (evt.getSource() == WDinitiateBtn) {
                 this.remove(WDinitiateBtn);
-                this.remove(cancelBtn);
                 
                 accountNumber = Integer.parseInt(accountNumT.getText());
                 customer = customerList.getCustomerByAccountNumber(accountNumber);
@@ -251,19 +256,15 @@ public class CashierDashboard extends JFrame implements ActionListener{
                     this.add(DconfirmBtn);
                 }
     
-                // Cancel Button
-                cancelBtn = new JButton("Cancel");
                 cancelBtn.setBounds(580, 480, 258, 40);
-                cancelBtn.setFont(font20);
-                cancelBtn.setBackground(Color.RED);
-                cancelBtn.setForeground(Color.WHITE);
-                cancelBtn.addActionListener(this);
                 this.add(cancelBtn);
-    
+                
                 this.update(getGraphics());
             }
-    
+            
             else if (evt.getSource() == WconfirmBtn || evt.getSource() == DconfirmBtn) {
+                this.remove(cancelBtn);
+
                 double amount = Double.parseDouble(amountT.getText());
                 boolean success = false;
     
@@ -276,9 +277,11 @@ public class CashierDashboard extends JFrame implements ActionListener{
                     this.remove(DconfirmBtn);
                 }
     
-    
                 // Withdraw confirmation message
                 if (evt.getSource() == WconfirmBtn && success) {
+                    FileIO.writeAccounts(customerList);
+                    // Thread.sleep(1000);
+
                     // Message
                     msgL = new JLabel("Withdraw successful");
                     msgL.setBounds(310, 500, 280, 36);
@@ -295,9 +298,11 @@ public class CashierDashboard extends JFrame implements ActionListener{
                     this.add(msgL);
                 }
     
-    
                 // Deposit confirmation message
                 if (evt.getSource() == DconfirmBtn && success) {
+                    FileIO.writeAccounts(customerList);
+                    // Thread.sleep(1000);
+
                     // Message
                     msgL = new JLabel("Deposit successful");
                     msgL.setBounds(310, 500, 280, 36);
@@ -338,7 +343,7 @@ public class CashierDashboard extends JFrame implements ActionListener{
                 exitBtn.setForeground(Color.WHITE);
                 exitBtn.addActionListener(this);
                 this.add(exitBtn);
-    
+                
                 this.update(getGraphics());
             }
     
@@ -454,19 +459,19 @@ public class CashierDashboard extends JFrame implements ActionListener{
                 balanceT.setEditable(false);
                 this.add(balanceT);
     
-                // Label for from account name 
-                fromAccountNameL = new JLabel("To Account Name");
-                fromAccountNameL.setBounds(310, 540, 530, 25);
-                fromAccountNameL.setFont(font16b);
-                this.add(fromAccountNameL);
+                // Label for to account name 
+                toAccountNameL = new JLabel("To Account Name");
+                toAccountNameL.setBounds(310, 540, 530, 25);
+                toAccountNameL.setFont(font16b);
+                this.add(toAccountNameL);
                 
-                // Text field for from account name
-                fromAccountNameT = new JTextField();
-                fromAccountNameT.setBounds(310, 565, 530, 40);
-                fromAccountNameT.setFont(font20);
-                fromAccountNameT.setText(fromCustomer.getName());
-                fromAccountNameT.setEditable(false);
-                this.add(fromAccountNameT);
+                // Text field for to account name
+                toAccountNameT = new JTextField();
+                toAccountNameT.setBounds(310, 565, 530, 40);
+                toAccountNameT.setFont(font20);
+                toAccountNameT.setText(toCustomer.getName());
+                toAccountNameT.setEditable(false);
+                this.add(toAccountNameT);
     
                 tConfirmBtn = new JButton("Confirm");
                 tConfirmBtn.setBounds(310, 620, 255, 40);
@@ -494,6 +499,8 @@ public class CashierDashboard extends JFrame implements ActionListener{
                 boolean success = fromAccount.transfer(toAccount, amount);
     
                 if (success) {
+                    FileIO.writeAccounts(customerList);
+
                     // Message
                     msgL = new JLabel("Transfer successful");
                     msgL.setBounds(310, 640, 280, 36);

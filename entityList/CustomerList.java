@@ -6,8 +6,10 @@ import entity.account.Account;
 import entity.account.FixedDeposit;
 import entity.account.Savings;
 
+
 public class CustomerList {
     private ArrayList <Customer> customerList;
+    int lastAccountNum = 1000;
     
     public CustomerList(){
         customerList = new ArrayList<Customer>();
@@ -159,4 +161,18 @@ public class CustomerList {
             customerList.get(i).getAccounts().clear();
         }
     }
+
+    public int getNewAccountNumber() {
+        for (int i = 0; i < customerList.size(); i++) {
+            ArrayList <Account> accounts = customerList.get(i).getAccounts();
+
+            for (int j = 0; j < accounts.size(); j++) {
+                if (accounts.get(j).getAccountNumber() > lastAccountNum) {
+                    lastAccountNum = accounts.get(j).getAccountNumber();
+                }
+            }
+        }
+        return lastAccountNum+1;
+    }
+
 }

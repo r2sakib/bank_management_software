@@ -51,7 +51,7 @@ public class FileIO {
             sc.close();
 
         } catch (Exception expt) {
-            System.out.println(expt);
+            System.out.println("Error [FileIO: loadCustomerList()] \n\n" + expt + "\n\n");
         }
     }
 
@@ -77,7 +77,7 @@ public class FileIO {
                     customerList.getCustomerByNid(accountData[0]).addAccount(account);
                 } 
                 catch (NullPointerException expt) {
-                    System.out.println("Error [FileIO:80]: \n\n" + expt + "\n\n");
+                    System.out.println("Error [FileIO: loadAccounts()] \n\n" + expt + "\n\n");
                 }
             }
             sc.close();
@@ -96,7 +96,7 @@ public class FileIO {
             fw.close();
 
         } catch (Exception expt) {
-            System.out.println("Error [FileIO:99]: \n\n" + expt + "\n\n");
+            System.out.println("Error [FileIO: writeBankerList()] \n\n" + expt + "\n\n");
 
         }
     }
@@ -118,7 +118,7 @@ public class FileIO {
             sc.close();
 
         } catch (Exception expt) {
-            System.out.println("Error [FileIO:120]: \n\n" + expt + "\n\n");
+            System.out.println("Error [FileIO: loadBankerList()] \n\n" + expt + "\n\n");
         }
     }
 }

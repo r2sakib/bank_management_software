@@ -23,9 +23,9 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
     CustomerList customerList;
     BankerList bankerList;
-    LoginPage login;
+    LoginPage loginPage;
 
-	public ManagerDashboard (CustomerList customerList, BankerList bankerList){
+	public ManagerDashboard (CustomerList customerList, BankerList bankerList, LoginPage loginPage){
         super("Manager Dashboard");
         this.setSize(1200, 800);
         this.setLocation(200, 10);
@@ -43,7 +43,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
         this.customerList = customerList;
         this.bankerList = bankerList;
-        this.login = login;
+        this.loginPage = loginPage;
         
         // Label for page title 
         pageL = new JLabel("Manager Dashboard");
@@ -149,7 +149,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
         if(evt.getSource() == logoutBtn){
             this.dispose();
-            login.setVisible(true);
+            loginPage.setVisible(true);
         }
 
         else if (evt.getSource() == createCustomerBtn || evt.getSource() == createBankerBtn) {
@@ -335,7 +335,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                     addressT.setText("");
                     mobileNumberT.setText("");
                     emailT.setText("");
-                    jobTitleT.setText("");
                     cancelBtn.setText("Exit");
                 }
 
@@ -732,7 +731,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Account created successfully");
 
                 this.dispose();
-                new ManagerDashboard(customerList, bankerList);
+                new ManagerDashboard(customerList, bankerList, loginPage);
 
             } catch (Exception expt) {
                 JOptionPane.showMessageDialog(this, "Error.");
@@ -861,7 +860,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
         else if (evt.getSource() == cancelBtn) {
             this.dispose();
-            ManagerDashboard managerDashboard = new ManagerDashboard(customerList, bankerList);
+            new ManagerDashboard(customerList, bankerList, loginPage);
         }
     
     }

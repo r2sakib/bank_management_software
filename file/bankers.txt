@@ -1,0 +1,2 @@
+Sadman Sakib,1231,2002,Sirajganj,01793489230,sakib@gmail.com,1234,Cashier
+Adreeta,1232,2003,Dhaka,0132804032,adreeta@gmail.com,1234,Manager

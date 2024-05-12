@@ -102,13 +102,13 @@ public class LoginPage extends JFrame implements ActionListener {
                 this.setVisible(false);
             } 
             else if (bankerList.isValid(email, password) && banker.getJobTitle().equals("Cashier")) {
-                CashierDashboard cashierDashboard = new CashierDashboard(customerList, this);
+                new CashierDashboard(customerList, this);
                 emailT.setText(""); 
                 userPassword.setText(""); 
                 this.setVisible(false);
             }
             else if (bankerList.isValid(email, password) && banker.getJobTitle().equals("Manager")) {
-                // ManagerDashboard managerDashboard = new ManagerDashboard(customerList, this);
+                 new ManagerDashboard(customerList, bankerList, this);
                 emailT.setText(""); 
                 userPassword.setText(""); 
                 this.setVisible(false);
@@ -118,7 +118,7 @@ public class LoginPage extends JFrame implements ActionListener {
             }
         }
         else if (resetBtn == evt.getSource()) {
-            ResetPassword resetPassword = new ResetPassword(this);
+            new ResetPassword(this);
             this.setVisible(false);
         }
     }
