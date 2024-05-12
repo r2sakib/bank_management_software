@@ -46,6 +46,16 @@ public abstract class Account {
 			return false;
 		}
 	}
+
+	public boolean transfer(Account toAccount, double amount) {
+		if (this.withdraw(amount)) {
+			toAccount.deposit(amount);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
 	
 }

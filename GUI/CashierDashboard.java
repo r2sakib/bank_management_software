@@ -7,6 +7,8 @@ import java.awt.event.*;
 import entity.person.*;
 import entity.account.*;
 import entityList.*;
+import GUI.*;
+import file.*;
 
 public class CashierDashboard extends JFrame implements ActionListener{
     JLabel pageL;
@@ -19,16 +21,20 @@ public class CashierDashboard extends JFrame implements ActionListener{
     Font font16b = new Font("Inter", Font.BOLD, 16);
 
     CustomerList customerList;
+    LoginPage login;
 
-	public CashierDashboard (CustomerList customerList){
-
+	public CashierDashboard (CustomerList customerList, LoginPage login){
         super("Cashier Dashboard");
         this.setSize(1200, 800);
         this.setLocation(200, 10);
         this.setLayout(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        ImageIcon img = new ImageIcon("./resources/logo.png");
+        this.setIconImage(img.getImage());
+
         this.customerList = customerList;
+        this.login = login;
         
         // Label for page title 
         pageL = new JLabel("Cashier Dashboard");
@@ -96,7 +102,6 @@ public class CashierDashboard extends JFrame implements ActionListener{
     Customer customer, fromCustomer, toCustomer;
     Account account, fromAccount, toAccount;
 
-
     String pressedBtn;
 	
 	public void actionPerformed(ActionEvent evt) {
@@ -111,6 +116,7 @@ public class CashierDashboard extends JFrame implements ActionListener{
     
             if(evt.getSource() == logoutBtn){
                 this.dispose();
+                login.setVisible(true);
             }
     
             else if (evt.getSource() == withdrawBtn || evt.getSource() == depositBtn) {
@@ -626,10 +632,10 @@ public class CashierDashboard extends JFrame implements ActionListener{
            
             else if (evt.getSource() == exitBtn || evt.getSource() == cancelBtn) {
                 this.dispose();
-                CashierDashboard cashierDashboard = new CashierDashboard(customerList);
+                CashierDashboard cashierDashboard = new CashierDashboard(customerList, login);
             }
         }
-        
+
         catch(Exception expt) {
             JOptionPane.showMessageDialog(null, expt.getMessage());
         }

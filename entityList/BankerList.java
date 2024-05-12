@@ -14,12 +14,24 @@ public class BankerList {
         bankerList.add(banker);
     }
 
-    public void removeBanker(String nid) {
+    public boolean removeBankerByNid(String nid) {
         for (int i = 0; i < bankerList.size(); i++) {
             if (bankerList.get(i).getNid().equals(nid)) {
                 bankerList.remove(i);
+                return true;
             }
         }
+        return false;
+    }
+
+    public boolean removeBankerByEmail(String email) {
+        for (int i = 0; i < bankerList.size(); i++) {
+            if (bankerList.get(i).getEmail().equals(email)) {
+                bankerList.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public Banker getBankerByNid(String nid) {

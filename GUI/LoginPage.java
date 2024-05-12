@@ -8,7 +8,7 @@ import entityList.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Login extends JFrame implements ActionListener {
+public class LoginPage extends JFrame implements ActionListener {
     Font font = new Font("Inter", Font.PLAIN, 20);
     Font font24b = new Font("Inter", Font.BOLD, 24);
     Font font16 = new Font("Inter", Font.PLAIN, 16);
@@ -21,7 +21,7 @@ public class Login extends JFrame implements ActionListener {
     CustomerList customerList;
     BankerList bankerList;
 
-    public Login(CustomerList customerList, BankerList bankerList) {
+    public LoginPage(CustomerList customerList, BankerList bankerList) {
 
         super("Login");
         this.setSize(700, 450);
@@ -55,13 +55,13 @@ public class Login extends JFrame implements ActionListener {
 
         // Label for password 
         userPassL = new JLabel("Password");
-        userPassL.setBounds(150, 163, 100, 25);
+        userPassL.setBounds(150, 155, 100, 25);
         userPassL.setFont(font16);
         this.add(userPassL);
 
         // For password field
         userPassword = new JPasswordField();
-        userPassword.setBounds(150, 188, 400, 40);
+        userPassword.setBounds(150, 180, 400, 40);
         userPassword.setEchoChar('*');
         userPassword.setFont(font);
         this.add(userPassword);
@@ -77,7 +77,7 @@ public class Login extends JFrame implements ActionListener {
 
         // For Resest password button
         resetBtn = new JButton("Reset Password");
-        resetBtn.setBounds(260, 300, 170, 30);
+        resetBtn.setBounds(260, 300, 170, 40);
         resetBtn.setFont(font16);
         resetBtn.setBackground(Color.BLUE);
         resetBtn.setForeground(Color.WHITE);
@@ -88,25 +88,27 @@ public class Login extends JFrame implements ActionListener {
     }
 
  
-    public void actionPerformed(ActionEvent e) {
-        if (loginBtn == e.getSource()) {
+    public void actionPerformed(ActionEvent evt) {
+        if (loginBtn == evt.getSource()) {
             String email = emailT.getText();
             String password = String.valueOf(userPassword.getPassword());
+
+            Banker banker = bankerList.getBankerByEmail(email);
             
             if (customerList.isValid(email, password)) {
-                OnlineBanking onlineBanking = new OnlineBanking(customerList, this);
+                // OnlineBanking onlineBanking = new OnlineBanking(customerList, this);
                 emailT.setText(""); 
                 userPassword.setText(""); 
                 this.setVisible(false);
             } 
-            else if (bankerList.isValid(email, password).equals("Cashier")) {
+            else if (bankerList.isValid(email, password) && banker.getJobTitle().equals("Cashier")) {
                 CashierDashboard cashierDashboard = new CashierDashboard(customerList, this);
                 emailT.setText(""); 
                 userPassword.setText(""); 
                 this.setVisible(false);
             }
-            else if (bankerList.isValid(email, password).equals("Manager")) {
-                ManagerDashboard managerDashboard = new ManagerDashboard(customerList, this);
+            else if (bankerList.isValid(email, password) && banker.getJobTitle().equals("Manager")) {
+                // ManagerDashboard managerDashboard = new ManagerDashboard(customerList, this);
                 emailT.setText(""); 
                 userPassword.setText(""); 
                 this.setVisible(false);
@@ -114,6 +116,10 @@ public class Login extends JFrame implements ActionListener {
             else {
                 JOptionPane.showMessageDialog(this, "Login failed");
             }
+        }
+        else if (resetBtn == evt.getSource()) {
+            ResetPassword resetPassword = new ResetPassword(this);
+            this.setVisible(false);
         }
     }
 }

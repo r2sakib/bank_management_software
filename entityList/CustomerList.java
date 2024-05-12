@@ -35,12 +35,24 @@ public class CustomerList {
         return null;
     }
 
-    public void removeCustomer(String nid) {
+    public boolean removeCustomerByNid(String nid) {
         for(int i = 0; i < customerList.size(); i++){
             if(customerList.get(i).getNid().equals(nid)){
                 customerList.remove(i);
+                return true;
             }
         }
+        return false;
+    }
+
+    public boolean removeCustomerByEmail(String email) {
+        for(int i = 0; i < customerList.size(); i++){
+            if(customerList.get(i).getEmail().equals(email)){
+                customerList.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
     
     public Account getAccount(int accountNumber) {

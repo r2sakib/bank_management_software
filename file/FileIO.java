@@ -8,11 +8,11 @@ import entity.account.*;
 import entityList.*;
 
 public class FileIO {
-    public static void writeCustomerList(CustomerList cList) {
+    public static void writeCustomerList(CustomerList customerList) {
         try {
             File file = new File("./file/customers.txt");
             FileWriter fw = new FileWriter(file, false);
-            fw.write(cList.customersToString());
+            fw.write(customerList.customersToString());
             fw.flush();
             fw.close();
 
@@ -21,11 +21,11 @@ public class FileIO {
         }
     }
 
-    public static void writeAccounts(CustomerList cList) {
+    public static void writeAccounts(CustomerList customerList) {
         try {
             File file = new File("./file/accounts.txt");
             FileWriter fw = new FileWriter(file, false);
-            fw.write(cList.accountsToString());
+            fw.write(customerList.accountsToString());
             fw.flush();
             fw.close();
 
@@ -34,8 +34,10 @@ public class FileIO {
         }
     }
 
-    public static void loadCustomerList(CustomerList cList) {
+    public static void loadCustomerList(CustomerList customerList) {
         try {
+            customerList.clear();
+
             File file = new File("./file/customers.txt");
             Scanner sc = new Scanner(file);
 
@@ -44,7 +46,7 @@ public class FileIO {
                 String[] customerData = line.split(",");
 
                 Customer customer = new Customer(customerData[0], customerData[1], Integer.parseInt(customerData[2]), customerData[3], customerData[4], customerData[5], customerData[6]);
-                cList.addCustomer(customer);
+                customerList.addCustomer(customer);
             }
             sc.close();
 
@@ -53,8 +55,10 @@ public class FileIO {
         }
     }
 
-    public static void loadAccounts(CustomerList cList) {
+    public static void loadAccounts(CustomerList customerList) {
         try {
+            customerList.clearAccounts();
+
             File file = new File("./file/accounts.txt");
             Scanner sc = new Scanner(file);
 
@@ -65,10 +69,16 @@ public class FileIO {
                 Account account = null;
                 if (accountData.length == 4) {
                     account = new Savings(Integer.parseInt(accountData[1]), Double.parseDouble(accountData[2]), Double.parseDouble(accountData[3]));
-                } else if (accountData.length == 5) {
+                } 
+                else if (accountData.length == 5) {
                     account = new FixedDeposit(Integer.parseInt(accountData[1]), Double.parseDouble(accountData[2]), Double.parseDouble(accountData[3]), Integer.parseInt(accountData[4]));
                 }
-                cList.getCustomerByNid(accountData[0]).addAccount(account);
+                try {
+                    customerList.getCustomerByNid(accountData[0]).addAccount(account);
+                } 
+                catch (NullPointerException expt) {
+                    System.out.println("Error [FileIO:80]: \n\n" + expt + "\n\n");
+                }
             }
             sc.close();
 
@@ -77,21 +87,24 @@ public class FileIO {
         }
     }
 
-    public static void writeBankerList(BankerList bList) {
+    public static void writeBankerList(BankerList bankerList) {
         try {
             File file = new File("./file/bankers.txt");
             FileWriter fw = new FileWriter(file, false);
-            fw.write(bList.bankersToString());
+            fw.write(bankerList.bankersToString());
             fw.flush();
             fw.close();
 
         } catch (Exception expt) {
-            System.out.println(expt);
+            System.out.println("Error [FileIO:99]: \n\n" + expt + "\n\n");
+
         }
     }
 
-    public static void loadBankerList(BankerList bList) {
+    public static void loadBankerList(BankerList bankerList) {
         try {
+            bankerList.clear();
+
             File file = new File("./file/bankers.txt");
             Scanner sc = new Scanner(file);
 
@@ -100,12 +113,12 @@ public class FileIO {
                 String[] bankerData = line.split(",");
 
                 Banker banker = new Banker(bankerData[0], bankerData[1], Integer.parseInt(bankerData[2]), bankerData[3], bankerData[4], bankerData[5], bankerData[6], bankerData[7]);
-                bList.addBanker(banker);
+                bankerList.addBanker(banker);
             }
             sc.close();
 
         } catch (Exception expt) {
-            System.out.println(expt);
+            System.out.println("Error [FileIO:120]: \n\n" + expt + "\n\n");
         }
     }
 }

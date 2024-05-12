@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import entity.account.Account;
 
 public class Customer extends Person {    
-    private ArrayList <Account> accounts;
+    private ArrayList  <Account> accounts;
 
     public Customer() {
         accounts = new ArrayList<Account>();
@@ -42,5 +42,4 @@ public class Customer extends Person {
 
         return account;
     }
-
 }
