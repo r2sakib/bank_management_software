@@ -3,6 +3,8 @@ package entityList;
 import java.util.ArrayList;
 import entity.person.Customer;
 import entity.account.Account;
+import entity.account.FixedDeposit;
+import entity.account.Savings;
 
 public class CustomerList {
     private ArrayList <Customer> customerList;
@@ -17,7 +19,7 @@ public class CustomerList {
     
     public Customer getCustomerByNid(String nid) {
         for(int i = 0; i < customerList.size(); i++){
-            if(customerList.get(i).getNid() == nid){
+            if(customerList.get(i).getNid().equals(nid)){
                 return customerList.get(i);
             }
         }
@@ -26,7 +28,7 @@ public class CustomerList {
 
     public Customer getCustomerByEmail(String email) {
         for(int i = 0; i < customerList.size(); i++){
-            if(customerList.get(i).getEmail() == email){
+            if(customerList.get(i).getEmail().equals(email)){
                 return customerList.get(i);
             }
         }
@@ -35,7 +37,7 @@ public class CustomerList {
 
     public void removeCustomer(String nid) {
         for(int i = 0; i < customerList.size(); i++){
-            if(customerList.get(i).getNid() == nid){
+            if(customerList.get(i).getNid().equals(nid)){
                 customerList.remove(i);
             }
         }
@@ -81,6 +83,68 @@ public class CustomerList {
                     accounts.remove(j);
                 }
             }
+        }
+    }
+
+    public String customersToString() {
+        String str = "";
+        for (int i = 0; i < customerList.size(); i++) {
+            Customer customer = customerList.get(i);
+            str += customer.getName() + ",";
+            str += customer.getNid() + ",";
+            str += customer.getBirthYear() + ",";
+            str += customer.getAddress() + ",";
+            str += customer.getMobileNumber() + ",";
+            str += customer.getEmail() + ",";
+            str += customer.getPassword();
+            str += "\n";
+        }
+        return str;
+    }
+
+    public String accountsToString() {
+        String str = "";
+        for (int i = 0; i < customerList.size(); i++) {
+            Customer c = customerList.get(i);
+            ArrayList <Account> accounts = c.getAccounts();
+
+            for (int j = 0; j < accounts.size(); j++) {
+                Account a = accounts.get(j);
+                str += c.getNid() + ",";
+                str += a.getAccountNumber() + ",";
+                str += a.getBalance() + ",";
+
+                if (a instanceof FixedDeposit) {
+                    FixedDeposit fd = (FixedDeposit) a;
+                    str += fd.getInterestRate() + ",";
+                    str += fd.getTenureYear();
+                } else if (a instanceof Savings) {
+                    Savings s = (Savings) a;
+                    str += s.getInterestRate();
+                }
+                str += "\n";
+            }
+        }
+        return str;
+    }
+
+    public boolean isValid(String email, String password) {
+        boolean valid = false;
+        for (int i = 0; i < customerList.size(); i++) {
+            if (customerList.get(i).getEmail().equals(email) && customerList.get(i).getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return valid;
+    }
+
+    public void clear() {
+        customerList.clear();
+    }
+
+    public void clearAccounts() {
+        for (int i = 0; i < customerList.size(); i++) {
+            customerList.get(i).getAccounts().clear();
         }
     }
 }

@@ -16,7 +16,7 @@ public class BankerList {
 
     public void removeBanker(String nid) {
         for (int i = 0; i < bankerList.size(); i++) {
-            if (bankerList.get(i).getNid() == nid) {
+            if (bankerList.get(i).getNid().equals(nid)) {
                 bankerList.remove(i);
             }
         }
@@ -24,7 +24,7 @@ public class BankerList {
 
     public Banker getBankerByNid(String nid) {
         for (int i = 0; i < bankerList.size(); i++) {
-            if (bankerList.get(i).getNid() == nid) {
+            if (bankerList.get(i).getNid().equals(nid)) {
                 return bankerList.get(i);
             }
         }
@@ -33,11 +33,42 @@ public class BankerList {
 
     public Banker getBankerByEmail(String email) {
         for (int i = 0; i < bankerList.size(); i++) {
-            if (bankerList.get(i).getEmail() == email) {
+            if (bankerList.get(i).getEmail().equals(email)) {
                 return bankerList.get(i);
             }
         }
         return null;
+    }
+
+    public String bankersToString() {
+        String str = "";
+        for (int i = 0; i < bankerList.size(); i++) {
+            Banker banker = bankerList.get(i);
+            str += banker.getName() + ",";
+            str += banker.getNid() + ",";
+            str += banker.getBirthYear() + ",";
+            str += banker.getAddress() + ",";
+            str += banker.getMobileNumber() + ",";
+            str += banker.getEmail() + ",";
+            str += banker.getPassword() + ",";
+            str += banker.getJobTitle();
+            str += "\n";
+        }
+        return str;
+    }
+
+    public boolean isValid(String email, String password) {
+        boolean valid = false;
+        for (int i = 0; i < bankerList.size(); i++) {
+            if (bankerList.get(i).getEmail().equals(email) && bankerList.get(i).getPassword().equals(password)) {
+                valid = true;
+            }
+        }
+        return valid;
+    }
+
+    public void clear() {
+        bankerList.clear();
     }
     
 }
