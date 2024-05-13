@@ -128,7 +128,7 @@ public class ResetPassword extends JFrame implements ActionListener {
             }
 
             if (success) {
-                JOptionPane.showMessageDialog(this, "Password reset successful");
+                JOptionPane.showMessageDialog(this, "Password reset successful", "Success", JOptionPane.INFORMATION_MESSAGE);
                 
                 emailT.setText(""); 
                 oldUserPassword.setText(""); 
@@ -138,7 +138,7 @@ public class ResetPassword extends JFrame implements ActionListener {
                 loginPage.setVisible(true);
             }
             else {
-                JOptionPane.showMessageDialog(this, "Invalid email or password");
+                JOptionPane.showMessageDialog(this, "Invalid email or password", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } 
         else if (evt.getSource() == cancelBtn) {

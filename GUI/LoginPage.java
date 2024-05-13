@@ -98,9 +98,10 @@ public class LoginPage extends JFrame implements ActionListener {
             String password = String.valueOf(userPassword.getPassword());
 
             Banker banker = bankerList.getBankerByEmail(email);
+            Customer customer = customerList.getCustomerByEmail(email);
             
             if (customerList.isValid(email, password)) {
-                // OnlineBanking onlineBanking = new OnlineBanking(customerList, this);
+                new CustomerDashboard(customerList, email, this);
                 emailT.setText(""); 
                 userPassword.setText(""); 
                 this.setVisible(false);
@@ -112,13 +113,13 @@ public class LoginPage extends JFrame implements ActionListener {
                 this.setVisible(false);
             }
             else if (bankerList.isValid(email, password) && banker.getJobTitle().equals("Manager")) {
-                 new ManagerDashboard(customerList, bankerList, this);
+                new ManagerDashboard(customerList, bankerList, this);
                 emailT.setText(""); 
                 userPassword.setText(""); 
                 this.setVisible(false);
             }
             else {
-                JOptionPane.showMessageDialog(this, "Login failed");
+                JOptionPane.showMessageDialog(this, "Login failed", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         else if (resetBtn == evt.getSource()) {

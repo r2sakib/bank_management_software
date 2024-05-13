@@ -20,7 +20,7 @@ public class CustomerDashboard extends JFrame implements ActionListener{
     Font font16 = new Font("Inter", Font.PLAIN, 16);
     Font font16b = new Font("Inter", Font.BOLD, 16);
 
-    String customerNID;
+    String email;
     Customer customer;
     ArrayList<Account> accounts;
     CustomerList customerList;
@@ -28,7 +28,7 @@ public class CustomerDashboard extends JFrame implements ActionListener{
 
     JButton fundTransferBtn, logoutBtn;
 
-	public CustomerDashboard (CustomerList customerList, String customerNID) {
+	public CustomerDashboard (CustomerList customerList, String email, LoginPage loginPage) {
         super("Customer Dashboard");
         this.setSize(1000, 800);
         this.setLocation(300, 10);
@@ -45,8 +45,8 @@ public class CustomerDashboard extends JFrame implements ActionListener{
 		FileIO.loadAccounts(customerList);
 
         this.customerList = customerList;
-        this.customerNID = customerNID;
-        this.customer = customerList.getCustomerByNid(customerNID);
+        this.email = email;
+        this.customer = customerList.getCustomerByEmail(email);
         this.accounts = customer.getAccounts();
 
         this.loginPage = loginPage;
@@ -266,10 +266,15 @@ public class CustomerDashboard extends JFrame implements ActionListener{
         }
 
         else if (evt.getSource() == initiateBtn) {
-            this.remove(initiateBtn);
             
             int toAccountNum = Integer.parseInt(toAccountNumT.getText());
             Customer toCustomer = customerList.getCustomerByAccountNumber(toAccountNum);
+            
+            if (toCustomer == null) {
+                JOptionPane.showMessageDialog(this, "Account not found", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            this.remove(initiateBtn);
             toAccountNameT.setText(toCustomer.getName());
 
             vgap += 160;
@@ -286,9 +291,11 @@ public class CustomerDashboard extends JFrame implements ActionListener{
         }
 
         else if (evt.getSource() == confirmBtn) {
+            double amount = Double.parseDouble(amountT.getText());
+            
             int accountNum = Integer.parseInt(accountSelectCB.getSelectedItem().toString());
             Account fromAccount = customer.getAccount(accountNum);
-            double amount = Double.parseDouble(amountT.getText());
+
             int toAccountNum = Integer.parseInt(toAccountNumT.getText());
             Account toAccount = customerList.getAccount(toAccountNum);
             
@@ -311,14 +318,13 @@ public class CustomerDashboard extends JFrame implements ActionListener{
                 }
             }
 
-
             this.dispose();
-            new CustomerDashboard(customerList, customerNID);
+            new CustomerDashboard(customerList, email, loginPage);
         }
 
         else if (evt.getSource() == cancelBtn) {
             this.dispose();
-            new CustomerDashboard(customerList, customerNID);
+            new CustomerDashboard(customerList, email, loginPage);
         }
     }
     catch (Exception expt) {

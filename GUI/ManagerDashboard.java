@@ -25,6 +25,10 @@ public class ManagerDashboard extends JFrame implements ActionListener {
     BankerList bankerList;
     LoginPage loginPage;
 
+    int hgapL = 230;
+    int hgapR = 680;
+    int width = 300;
+
 	public ManagerDashboard (CustomerList customerList, BankerList bankerList, LoginPage loginPage){
         super("Manager Dashboard");
         this.setSize(1200, 800);
@@ -159,10 +163,9 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent evt) {
 
-
         // LOGOUT
         if(evt.getSource() == logoutBtn){
-            this.dispose();
+            this.dispose(); 
             loginPage.setVisible(true);
         }
 
@@ -170,7 +173,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
         else if (evt.getSource() == createCustomerBtn || evt.getSource() == createBankerBtn) {
             try {
-                createCustomerBtn.removeActionListener(this);
+                removeAllActionListeners();
                 
                 if (evt.getSource() == createCustomerBtn) {
                     createCustomerBtn.setBackground(Color.GRAY);
@@ -195,9 +198,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                     pressedBtn = "createBanker";
                 }
                 int vgap = 350;
-                int hgapL = 200;
-                int hgapR = 650;
-                int width = 350;
 
                 // NAME 
                 nameL = new JLabel("Name");
@@ -306,7 +306,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 this.update(getGraphics());
             }
             catch (Exception expt) {
-                JOptionPane.showMessageDialog(this, "Error.");
+                JOptionPane.showMessageDialog(this, "Error.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Error [ManagerDashboard: createCustomerBtn] " + "\n\n" + expt + "\n\n");
             }
         }
@@ -346,19 +346,15 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                     bankerList.addBanker(banker);
                     FileIO.writeBankerList(bankerList);
                     
-                    nameT.setText("");
-                    nidT.setText("");
-                    birthYearT.setText("");
-                    addressT.setText("");
-                    mobileNumberT.setText("");
-                    emailT.setText("");
-                    cancelBtn.setText("Exit");
                 }
+                
+                JOptionPane.showMessageDialog(this, "Success.", "Success", JOptionPane.INFORMATION_MESSAGE);                
 
-                JOptionPane.showMessageDialog(this, "Success.");                
+                this.dispose();
+                new ManagerDashboard(customerList, bankerList, loginPage);
             }
             catch (Exception expt) {
-                JOptionPane.showMessageDialog(this, "Error. Invalid Input.");
+                JOptionPane.showMessageDialog(this, "Error. Invalid Input.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Error [ManagerDashboard: CCBconfirmBtn] " + "\n\n" + expt + "\n\n");
             }
         }
@@ -366,7 +362,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
         // REMOVE CUSTOMER OR BANKER
 
         else if (evt.getSource() == removeCustomerBtn || evt.getSource() == removeBankerBtn) {
-            removeCustomerBtn.removeActionListener(this);
+            removeAllActionListeners();
             
             if (evt.getSource() == removeCustomerBtn) {
                 removeCustomerBtn.setBackground(Color.GRAY);
@@ -391,9 +387,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 pressedBtn = "removeBanker";
             }
             int vgap = 350;
-            int hgapL = 230;
-            int hgapR = 680;
-            int width = 300;
 
             // NID 
             nidL = new JLabel("NID Number or Email");
@@ -442,8 +435,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
         else if (evt.getSource() == RCBinitiateBtn) {
             int vgap = 350;
-            int hgapL = 230;
-            int width = 300;
 
             String nidEmailT = nidT.getText();
             if (pressedBtn == "removeCustomer") {
@@ -451,7 +442,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 Customer customerByEmail = customerList.getCustomerByEmail(nidEmailT);
 
                 if (customerByNid == null && customerByEmail == null) {
-                    JOptionPane.showMessageDialog(this, "Customer not found");
+                    JOptionPane.showMessageDialog(this, "Customer not found", "Error", JOptionPane.ERROR_MESSAGE);
                     nidT.setText("");
                     return;
                 }
@@ -469,7 +460,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 Banker bankerByEmail = bankerList.getBankerByEmail(nidEmailT);
 
                 if (bankerByNid == null && bankerByEmail == null) {
-                    JOptionPane.showMessageDialog(this, "Banker not found");
+                    JOptionPane.showMessageDialog(this, "Banker not found", "Error", JOptionPane.ERROR_MESSAGE);
                     nidT.setText("");
                     return;
                 }
@@ -514,14 +505,13 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                         FileIO.writeCustomerList(customerList);
                         FileIO.writeAccounts(customerList);
 
-                        JOptionPane.showMessageDialog(this, "Customer removed successfully");
-                        nidT.setText("");
-                        nameT.setText("");
-                        cancelBtn.setText("Exit");
-                        return;
+                        JOptionPane.showMessageDialog(this, "Customer removed successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        this.dispose();
+                        new ManagerDashboard(customerList, bankerList, loginPage);
                     }
                     else {
-                        JOptionPane.showMessageDialog(this, "Customer not found");
+                        JOptionPane.showMessageDialog(this, "Customer not found", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 
@@ -539,13 +529,13 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                     if (success) {
                         FileIO.writeBankerList(bankerList);
                         
-                        JOptionPane.showMessageDialog(this, "Banker removed successfully");
-                        nidT.setText("");
-                        nameT.setText("");
-                        return;
+                        JOptionPane.showMessageDialog(this, "Banker removed successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        
+                        this.dispose();
+                        new ManagerDashboard(customerList, bankerList, loginPage);
                     }
                     else {
-                        JOptionPane.showMessageDialog(this, "Banker not found");
+                        JOptionPane.showMessageDialog(this, "Banker not found", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } catch (Exception expt) {
@@ -560,6 +550,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
         // CREATE ACCOUNT
 
         else if (evt.getSource() == createAccountBtn) {
+            removeAllActionListeners();
             createAccountBtn.setBackground(Color.GRAY);
 
             // Section title
@@ -569,9 +560,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
             this.add(secL);
 
             int vgap = 350;
-            int hgapL = 230;
-            int hgapR = 680;
-            int width = 300;
 
             // NID 
             nidL = new JLabel("Account Holder NID or Email");
@@ -645,9 +633,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
         else if (evt.getSource() == createAccountInitiateBtn) {
             int vgap = 430;
-            int hgapL = 230;
-            int hgapR = 680;
-            int width = 300;
 
             String nidEmailT = nidT.getText();
             Customer customerByNid = customerList.getCustomerByNid(nidEmailT);
@@ -722,7 +707,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 Customer customerByEmail = customerList.getCustomerByEmail(nidEmail);
 
                 if (customerByNid == null && customerByEmail == null) {
-                    JOptionPane.showMessageDialog(this, "Customer not found");
+                    JOptionPane.showMessageDialog(this, "Customer not found", "Error", JOptionPane.ERROR_MESSAGE);
                     nidT.setText("");
                     return;
                 }
@@ -750,13 +735,13 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
                 FileIO.writeAccounts(customerList);
 
-                JOptionPane.showMessageDialog(this, "Account created successfully");
+                JOptionPane.showMessageDialog(this, "Account created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
 
                 this.dispose();
                 new ManagerDashboard(customerList, bankerList, loginPage);
 
             } catch (Exception expt) {
-                JOptionPane.showMessageDialog(this, "Error.");
+                JOptionPane.showMessageDialog(this, "Error.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Error [ManagerDashboard: createAccountConfirmBtn] " + "\n\n" + expt + "\n\n");
             }
         }
@@ -764,6 +749,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
         // REMOVE ACCOUNT
 
         else if (evt.getSource() == removeAccountBtn) {
+            removeAllActionListeners();
             removeAccountBtn.setBackground(Color.GRAY);
 
             // Section title
@@ -773,9 +759,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
             this.add(secL);
 
             int vgap = 350;
-            int hgapL = 230;
-            int hgapR = 680;
-            int width = 300;
 
             // ACCOUNT NUMBER 
             accountNumL = new JLabel("Account Number");
@@ -824,15 +807,13 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
         else if (evt.getSource() == removeAccountInitiateBtn) {
             int vgap = 350;
-            int hgapL = 230;
-            int width = 300;
 
             String accountNumber = accountNumT.getText();
             Account account = customerList.getAccount(Integer.parseInt(accountNumber));
             Customer customer = customerList.getCustomerByAccountNumber(Integer.parseInt(accountNumber));
 
             if (account == null) {
-                JOptionPane.showMessageDialog(this, "Account not found");
+                JOptionPane.showMessageDialog(this, "Account not found", "Error", JOptionPane.ERROR_MESSAGE);
                 accountNumT.setText("");
                 return;
             }
@@ -862,7 +843,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 Customer customer = customerList.getCustomerByAccountNumber(Integer.parseInt(accountNumber));
 
                 if (account == null) {
-                    JOptionPane.showMessageDialog(this, "Account not found");
+                    JOptionPane.showMessageDialog(this, "Account not found", "Error", JOptionPane.ERROR_MESSAGE);
                     accountNumT.setText("");
                     return;
                 }
@@ -872,13 +853,13 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                     customerList.clearAccounts();
                     FileIO.writeAccounts(customerList);
 
-                    JOptionPane.showMessageDialog(this, "Account removed successfully");
-                    accountNumT.setText("");
-                    nameT.setText("");
-                    cancelBtn.setText("Exit");
+                    JOptionPane.showMessageDialog(this, "Account removed successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    this.dispose();
+                    new ManagerDashboard(customerList, bankerList, loginPage);
                 }
             } catch (Exception expt) {
-                JOptionPane.showMessageDialog(this, "Error.");
+                JOptionPane.showMessageDialog(this, "Error.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Error [ManagerDashboard: removeAccountConfirmBtn] " + "\n\n" + expt + "\n\n");
             }
         }
@@ -911,9 +892,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 pressedBtn = "editBankerInfo";
             }
             int vgap = 350;
-            int hgapL = 230;
-            int hgapR = 680;
-            int width = 300;
 
             // NID 
             nidL = new JLabel("NID Number or Email");
@@ -1033,8 +1011,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
             this.remove(ECBinitiatieBtn);
 
             int vgap = 350;
-            int hgapL = 230;
-            int width = 300;
 
             String nidT = this.nidT.getText();
             Customer customerByNid = customerList.getCustomerByNid(nidT);
@@ -1052,7 +1028,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
             if (pressedBtn == "editCustomerInfo") {
                 if (customerByNid == null && customerByEmail == null) {
-                    JOptionPane.showMessageDialog(this, "Customer not found");
+                    JOptionPane.showMessageDialog(this, "Customer not found", "Error", JOptionPane.ERROR_MESSAGE);
                     this.nidT.setText("");
                     return;
                 }
@@ -1073,7 +1049,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
             }
             else if (pressedBtn == "editBankerInfo") {
                 if (bankerByNid == null && bankerByEmail == null) {
-                    JOptionPane.showMessageDialog(this, "Banker not found");
+                    JOptionPane.showMessageDialog(this, "Banker not found", "Error", JOptionPane.ERROR_MESSAGE);
                     this.nidT.setText("");
                     return;
                 }
@@ -1138,7 +1114,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                     }
 
                     FileIO.writeCustomerList(customerList);
-                    JOptionPane.showMessageDialog(this, "Customer info updated successfully");
+                    JOptionPane.showMessageDialog(this, "Customer info updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
                 else if (pressedBtn == "editBankerInfo") {
                     Banker bankerByNid = bankerList.getBankerByNid(nidT);
@@ -1162,14 +1138,14 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                     }
 
                     FileIO.writeBankerList(bankerList);
-                    JOptionPane.showMessageDialog(this, "Banker info updated successfully");
+                    JOptionPane.showMessageDialog(this, "Banker info updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
 
                 this.dispose();
                 new ManagerDashboard(customerList, bankerList, loginPage);
 
             } catch (Exception expt) { 
-                JOptionPane.showMessageDialog(this, "Error.");
+                JOptionPane.showMessageDialog(this, "Error.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Error [ManagerDashboard: ECBconfirmBtn] " + "\n\n" + expt + "\n\n");
             }
         }
