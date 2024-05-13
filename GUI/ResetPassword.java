@@ -11,9 +11,11 @@ import java.awt.event.*;
 import java.io.File;
 
 public class ResetPassword extends JFrame implements ActionListener {
-    Font font = new Font("Inter", Font.PLAIN, 20);
+    Font font20 = new Font("Inter", Font.PLAIN, 20);
+    Font font20b = new Font("Inter", Font.BOLD, 20);
     Font font24b = new Font("Inter", Font.BOLD, 24);
     Font font16 = new Font("Inter", Font.PLAIN, 16);
+    Font font16b = new Font("Inter", Font.BOLD, 16);
     
     JLabel emailL, pageL, oldUserPassL, newUserPassL;
     JTextField emailT;
@@ -28,6 +30,7 @@ public class ResetPassword extends JFrame implements ActionListener {
         this.setSize(700, 450);
         this.setLocation(400, 200);
         this.setLayout(null);
+        this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         ImageIcon img = new ImageIcon("./resources/logo.png");
@@ -44,46 +47,46 @@ public class ResetPassword extends JFrame implements ActionListener {
         // Label for email 
         emailL = new JLabel("Email");
         emailL.setBounds(150, 70, 100, 25);
-        emailL.setFont(font16);
+        emailL.setFont(font16b);
         this.add(emailL);
 
         // Text field for email
         emailT = new JTextField();
         emailT.setBounds(150, 96, 400, 40);
-        emailT.setFont(font);
+        emailT.setFont(font20);
         this.add(emailT);
 
         // Label for old password 
         oldUserPassL = new JLabel("Old Password");
-        oldUserPassL.setBounds(150, 150, 100, 25);
-        oldUserPassL.setFont(font16);
+        oldUserPassL.setBounds(150, 150, 150, 25);
+        oldUserPassL.setFont(font16b);
         this.add(oldUserPassL);
 
         // For old password field
         oldUserPassword = new JPasswordField();
         oldUserPassword.setBounds(150, 175, 400, 40);
         oldUserPassword.setEchoChar('*');
-        oldUserPassword.setFont(font);
+        oldUserPassword.setFont(font20);
         this.add(oldUserPassword);
 
         // Label for new password 
         newUserPassL = new JLabel("New Password");
         newUserPassL.setBounds(150, 230, 200, 25);
-        newUserPassL.setFont(font16);
+        newUserPassL.setFont(font16b);
         this.add(newUserPassL);
 
         // For new password field
         newUserPassword = new JPasswordField();
         newUserPassword.setBounds(150, 255, 400, 40);
         newUserPassword.setEchoChar('*');
-        newUserPassword.setFont(font);
+        newUserPassword.setFont(font20);
         this.add(newUserPassword);
 
 
         // For reset button
         resetBtn = new JButton("Reset Password");
         resetBtn.setBounds(150, 310, 190, 40);
-        resetBtn.setFont(font16);
+        resetBtn.setFont(font20);
         resetBtn.setBackground(Color.BLUE);
         resetBtn.setForeground(Color.WHITE);
         resetBtn.addActionListener(this);
@@ -92,7 +95,7 @@ public class ResetPassword extends JFrame implements ActionListener {
         // For reset button
         cancelBtn = new JButton("Cancel");
         cancelBtn.setBounds(360, 310, 190, 40);
-        cancelBtn.setFont(font16);
+        cancelBtn.setFont(font20);
         cancelBtn.setBackground(Color.RED);
         cancelBtn.setForeground(Color.WHITE);
         cancelBtn.addActionListener(this);

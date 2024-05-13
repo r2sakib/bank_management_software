@@ -9,9 +9,12 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class LoginPage extends JFrame implements ActionListener {
-    Font font = new Font("Inter", Font.PLAIN, 20);
+    Font font20 = new Font("Inter", Font.PLAIN, 20);
+    Font font20b = new Font("Inter", Font.BOLD, 20);
     Font font24b = new Font("Inter", Font.BOLD, 24);
     Font font16 = new Font("Inter", Font.PLAIN, 16);
+    Font font16b = new Font("Inter", Font.BOLD, 16);
+
     
     JLabel emailL, pageL, userPassL;
     JTextField emailT;
@@ -27,6 +30,7 @@ public class LoginPage extends JFrame implements ActionListener {
         this.setSize(700, 450);
         this.setLocation(400, 200);
         this.setLayout(null);
+        this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         ImageIcon img = new ImageIcon("./resources/logo.png");
@@ -44,32 +48,32 @@ public class LoginPage extends JFrame implements ActionListener {
         // Label for email 
         emailL = new JLabel("Email");
         emailL.setBounds(150, 70, 100, 25);
-        emailL.setFont(font16);
+        emailL.setFont(font16b);
         this.add(emailL);
 
         // Text field for email
         emailT = new JTextField();
         emailT.setBounds(150, 96, 400, 40);
-        emailT.setFont(font);
+        emailT.setFont(font20);
         this.add(emailT);
 
         // Label for password 
         userPassL = new JLabel("Password");
         userPassL.setBounds(150, 155, 100, 25);
-        userPassL.setFont(font16);
+        userPassL.setFont(font16b);
         this.add(userPassL);
 
         // For password field
         userPassword = new JPasswordField();
         userPassword.setBounds(150, 180, 400, 40);
         userPassword.setEchoChar('*');
-        userPassword.setFont(font);
+        userPassword.setFont(font20);
         this.add(userPassword);
 
         // For login button
         loginBtn = new JButton("Login");
         loginBtn.setBounds(260, 250, 170, 40);
-        loginBtn.setFont(font16);
+        loginBtn.setFont(font20);
         loginBtn.setBackground(Color.BLACK);
         loginBtn.setForeground(Color.WHITE);
         loginBtn.addActionListener(this);
@@ -77,8 +81,8 @@ public class LoginPage extends JFrame implements ActionListener {
 
         // For Resest password button
         resetBtn = new JButton("Reset Password");
-        resetBtn.setBounds(260, 300, 170, 40);
-        resetBtn.setFont(font16);
+        resetBtn.setBounds(245, 300, 200, 40);
+        resetBtn.setFont(font20);
         resetBtn.setBackground(Color.BLUE);
         resetBtn.setForeground(Color.WHITE);
         resetBtn.addActionListener(this);
