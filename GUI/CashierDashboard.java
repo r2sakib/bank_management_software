@@ -99,6 +99,13 @@ public class CashierDashboard extends JFrame implements ActionListener {
 		this.setVisible(true);	
 	}
 
+    private void removeAllActionListeners() {
+        depositBtn.removeActionListener(this);
+        withdrawBtn.removeActionListener(this);
+        transferBalanceBtn.removeActionListener(this);
+        checkBalanceBtn.removeActionListener(this);
+    }
+
     JLabel secL, accountNumL, accountNameL, balanceL, amountL, msgL, newBalanceL, fromAccountNumL, toAccountNumL, fromAccountNameL, toAccountNameL;
     JTextField accountNumT, accountNameT, balanceT, amountT, newBalanceT, fromAccountNumT, toAccountNumT, fromAccountNameT, toAccountNameT;
     JButton WDinitiateBtn, WconfirmBtn, DconfirmBtn, exitBtn, cancelBtn, cBalanceBtn, tBalanceBtn, tInitiateBtn, tConfirmBtn;
@@ -126,7 +133,7 @@ public class CashierDashboard extends JFrame implements ActionListener {
             }
     
             else if (evt.getSource() == withdrawBtn || evt.getSource() == depositBtn) {
-                withdrawBtn.removeActionListener(this);
+                removeAllActionListeners();
                 
                 if (evt.getSource() == withdrawBtn) {
                     withdrawBtn.setBackground(Color.GRAY);
@@ -239,7 +246,7 @@ public class CashierDashboard extends JFrame implements ActionListener {
                     WconfirmBtn = new JButton("Confirm");
                     WconfirmBtn.setBounds(310, 480, 255, 40);
                     WconfirmBtn.setFont(font20);
-                    WconfirmBtn.setBackground(Color.GREEN);
+                    WconfirmBtn.setBackground(Color.BLUE);
                     WconfirmBtn.setForeground(Color.WHITE);
                     WconfirmBtn.addActionListener(this);
                     this.add(WconfirmBtn);
@@ -348,6 +355,7 @@ public class CashierDashboard extends JFrame implements ActionListener {
             }
     
             else if (evt.getSource() == transferBalanceBtn) {
+                removeAllActionListeners();
                 transferBalanceBtn.setBackground(Color.GRAY);
     
                 // Section title
@@ -546,6 +554,7 @@ public class CashierDashboard extends JFrame implements ActionListener {
             }
     
             else if (evt.getSource() == checkBalanceBtn) {
+                removeAllActionListeners();
                 checkBalanceBtn.setBackground(Color.GRAY);
     
                 // Section title
