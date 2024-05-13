@@ -98,7 +98,6 @@ public class LoginPage extends JFrame implements ActionListener {
             String password = String.valueOf(userPassword.getPassword());
 
             Banker banker = bankerList.getBankerByEmail(email);
-            Customer customer = customerList.getCustomerByEmail(email);
             
             if (customerList.isValid(email, password)) {
                 new CustomerDashboard(customerList, email, this);
