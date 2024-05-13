@@ -29,6 +29,7 @@ public class CashierDashboard extends JFrame implements ActionListener {
         this.setSize(1200, 800);
         this.setLocation(200, 10);
         this.setLayout(null);
+        this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         // LOGO

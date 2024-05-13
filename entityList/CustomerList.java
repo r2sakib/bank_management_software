@@ -1,6 +1,7 @@
 package entityList;
 
 import java.util.ArrayList;
+
 import entity.person.Customer;
 import entity.account.Account;
 import entity.account.FixedDeposit;
