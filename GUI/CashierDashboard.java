@@ -69,7 +69,7 @@ public class CashierDashboard extends JFrame implements ActionListener {
 		
 		
 		// Transfer Balance button 
-		transferBalanceBtn = new JButton("Transfer Balance");
+		transferBalanceBtn = new JButton("Fund Transfer");
         transferBalanceBtn.setBounds(310, 190, 210, 50);
         transferBalanceBtn.setFont(font20);
         transferBalanceBtn.setBackground(Color.BLACK);
@@ -164,8 +164,7 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 accountNumL.setBounds(310, 315, 280, 25);
                 accountNumL.setFont(font16b);
                 this.add(accountNumL);
-    
-                // Text field for account number
+
                 accountNumT = new JTextField();
                 accountNumT.setBounds(310, 340, 280, 40);
                 accountNumT.setFont(font20);
@@ -177,7 +176,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 amountL.setFont(font16b);
                 this.add(amountL);
     
-                // Text field for Amount
                 amountT = new JTextField();
                 amountT.setBounds(630, 340, 210, 40);
                 amountT.setFont(font20);
@@ -210,6 +208,13 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 accountNumber = Integer.parseInt(accountNumT.getText());
                 customer = customerList.getCustomerByAccountNumber(accountNumber);
                 account = customer.getAccount(accountNumber);
+
+                if (account instanceof FixedDeposit) {
+                    JOptionPane.showMessageDialog(null, "Fixed Deposit account cannot be withdrawn or deposited", "Error", JOptionPane.ERROR_MESSAGE);
+                    
+                    this.dispose();
+                    new CashierDashboard(customerList, login);
+                }
     
                 // Label for account name 
                 accountNameL = new JLabel("Account Name");
@@ -217,7 +222,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 accountNameL.setFont(font16b);
                 this.add(accountNameL);
                 
-                // Text field for account name
                 accountNameT = new JTextField();
                 accountNameT.setBounds(310, 420, 280, 40);
                 accountNameT.setFont(font20);
@@ -233,7 +237,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
     
                 String balance = String.valueOf(account.getBalance());
                 
-                // Text field for balance
                 balanceT = new JTextField();
                 balanceT.setBounds(630, 420, 210, 40);
                 balanceT.setFont(font20);
@@ -288,7 +291,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 // Withdraw confirmation message
                 if (evt.getSource() == WconfirmBtn && success) {
                     FileIO.writeAccounts(customerList);
-                    // Thread.sleep(1000);
 
                     // Message
                     msgL = new JLabel("Withdraw successful");
@@ -309,7 +311,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 // Deposit confirmation message
                 if (evt.getSource() == DconfirmBtn && success) {
                     FileIO.writeAccounts(customerList);
-                    // Thread.sleep(1000);
 
                     // Message
                     msgL = new JLabel("Deposit successful");
@@ -333,7 +334,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 newBalanceL.setFont(font16b);
                 this.add(newBalanceL);
     
-                // Text field for balance
                 String balance = String.valueOf(account.getBalance());
     
                 newBalanceT = new JTextField();
@@ -360,7 +360,7 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 transferBalanceBtn.setBackground(Color.GRAY);
     
                 // Section title
-                secL = new JLabel("TRANSFER BALANCE");
+                secL = new JLabel("FUND TRANSFER");
                 secL.setBounds(480, 270, 222, 36);
                 secL.setFont(font20b);
                 this.add(secL);
@@ -371,7 +371,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 fromAccountNumL.setFont(font16b);
                 this.add(fromAccountNumL);
     
-                // Text field for account number
                 fromAccountNumT = new JTextField();
                 fromAccountNumT.setBounds(310, 340, 280, 40);
                 fromAccountNumT.setFont(font20);
@@ -383,7 +382,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 amountL.setFont(font16b);
                 this.add(amountL);
     
-                // Text field for Amount
                 amountT = new JTextField();
                 amountT.setBounds(630, 340, 210, 40);
                 amountT.setFont(font20);
@@ -395,7 +393,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 toAccountNumL.setFont(font16b);
                 this.add(toAccountNumL);
                 
-                // Text field for to account number
                 toAccountNumT = new JTextField();
                 toAccountNumT.setFont(font20);
                 toAccountNumT.setBounds(310, 420, 530, 40);
@@ -423,28 +420,34 @@ public class CashierDashboard extends JFrame implements ActionListener {
             }
     
             else if (evt.getSource() == tInitiateBtn) {
+                fromAccountNumber = Integer.parseInt(fromAccountNumT.getText());
+                toAccountNumber = Integer.parseInt(toAccountNumT.getText());
+                amount = Double.parseDouble(amountT.getText());
+                
+                fromCustomer = customerList.getCustomerByAccountNumber(fromAccountNumber);
+                fromAccount = fromCustomer.getAccount(fromAccountNumber);
+                
+                toCustomer = customerList.getCustomerByAccountNumber(toAccountNumber);
+                toAccount = toCustomer.getAccount(toAccountNumber);
+                
+                if (fromAccount instanceof FixedDeposit || toAccount instanceof FixedDeposit) {
+                    JOptionPane.showMessageDialog(null, "Fixed Deposit account cannot be transfered from or to", "Error", JOptionPane.ERROR_MESSAGE);
+                    
+                    this.dispose();
+                    new CashierDashboard(customerList, login);
+                }
+
                 this.remove(tInitiateBtn);
                 this.remove(cancelBtn);
                 toAccountNumL.setBounds(310, 470, 280, 25);
                 toAccountNumT.setBounds(310, 495, 530, 40);
-    
-                fromAccountNumber = Integer.parseInt(fromAccountNumT.getText());
-                toAccountNumber = Integer.parseInt(toAccountNumT.getText());
-                amount = Double.parseDouble(amountT.getText());
-    
-                fromCustomer = customerList.getCustomerByAccountNumber(fromAccountNumber);
-                fromAccount = fromCustomer.getAccount(fromAccountNumber);
-    
-                toCustomer = customerList.getCustomerByAccountNumber(toAccountNumber);
-                toAccount = toCustomer.getAccount(toAccountNumber);
-    
+                
                 // Label for from account name 
                 fromAccountNameL = new JLabel("From Account Name");
                 fromAccountNameL.setBounds(310, 385, 280, 25);
                 fromAccountNameL.setFont(font16b);
                 this.add(fromAccountNameL);
                 
-                // Text field for from account name
                 fromAccountNameT = new JTextField();
                 fromAccountNameT.setBounds(310, 410, 280, 40);
                 fromAccountNameT.setFont(font20);
@@ -460,7 +463,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
     
                 String balance = String.valueOf(fromAccount.getBalance());
                 
-                // Text field for from account balance
                 balanceT = new JTextField();
                 balanceT.setBounds(630, 410, 210, 40);
                 balanceT.setFont(font20);
@@ -474,7 +476,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 toAccountNameL.setFont(font16b);
                 this.add(toAccountNameL);
                 
-                // Text field for to account name
                 toAccountNameT = new JTextField();
                 toAccountNameT.setBounds(310, 565, 530, 40);
                 toAccountNameT.setFont(font20);
@@ -532,7 +533,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 newBalanceL.setFont(font16b);
                 this.add(newBalanceL);
     
-                // Text field for from account balance
                 String balance = String.valueOf(fromAccount.getBalance());
     
                 newBalanceT = new JTextField();
@@ -570,7 +570,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 accountNumL.setFont(font16b);
                 this.add(accountNumL);
     
-                // Text field for account number
                 accountNumT = new JTextField();
                 accountNumT.setBounds(310, 340, 530, 40);
                 accountNumT.setFont(font20);
@@ -611,7 +610,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
                 accountNameL.setFont(font16b);
                 this.add(accountNameL);
                 
-                // Text field for account name
                 accountNameT = new JTextField();
                 accountNameT.setBounds(310, 420, 280, 40);
                 accountNameT.setFont(font20);
@@ -627,7 +625,6 @@ public class CashierDashboard extends JFrame implements ActionListener {
     
                 String balance = String.valueOf(account.getBalance());
                 
-                // Text field for balance
                 balanceT = new JTextField();
                 balanceT.setBounds(630, 420, 210, 40);
                 balanceT.setFont(font20);
