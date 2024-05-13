@@ -30,6 +30,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
         this.setSize(1200, 800);
         this.setLocation(200, 10);
         this.setLayout(null);
+        this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         // SET ICON
@@ -135,11 +136,22 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 		this.setVisible(true);	
 	}
 
+    private void removeAllActionListeners() {
+        createCustomerBtn.removeActionListener(this);
+        removeCustomerBtn.removeActionListener(this);
+        createAccountBtn.removeActionListener(this);
+        removeAccountBtn.removeActionListener(this);
+        createBankerBtn.removeActionListener(this);
+        removeBankerBtn.removeActionListener(this);
+        editCustomerInfoBtn.removeActionListener(this);
+        editBankerInfoBtn.removeActionListener(this);
+    }
+
 
     JLabel secL, nameL, nidL, birthYearL, addressL, mobileNumberL, emailL, jobTitleL, accountNumL, accountTypeL, tenureYearL, interestRateL;
     JTextField nameT, nidT, birthYearT, addressT, mobileNumberT, emailT, jobTitleT, accountNumT, tenureYearT, interestRateT;
-    JButton CCBconfirmBtn, cancelBtn, RCBremoveConfirmBtn, RCBinitiateBtn;
-    JButton createAccountInitiateBtn, createAccountConfirmBtn, removeAccountInitiateBtn, removeAccountConfirmBtn; // CCB: Create Customer, Banker; RCB: Remove Customer Banker
+    JButton CCBconfirmBtn, cancelBtn, RCBconfimBtn, RCBinitiateBtn, ECBinitiatieBtn, ECBconfirmBtn;  // CCB: Create Customer, Banker; RCB: Remove Customer Banker
+    JButton createAccountInitiateBtn, createAccountConfirmBtn, removeAccountInitiateBtn, removeAccountConfirmBtn; 
     JComboBox jobTitleCB, accountTypeCB;
 
     String pressedBtn;
@@ -147,10 +159,14 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent evt) {
 
+
+        // LOGOUT
         if(evt.getSource() == logoutBtn){
             this.dispose();
             loginPage.setVisible(true);
         }
+
+        // CREATE CUSTOMER OR BANKER
 
         else if (evt.getSource() == createCustomerBtn || evt.getSource() == createBankerBtn) {
             try {
@@ -263,7 +279,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                     this.add(jobTitleL);
 
                     // JOB TITLE COMBO BOX
-                    jobTitleCB = new JComboBox(new String[]{"Cashier", "Manager"});
+                    jobTitleCB = new JComboBox<>(new String[]{"Cashier", "Manager"});
                     jobTitleCB.setBounds(hgapL, vgap+25, width, 40);
                     jobTitleCB.setFont(font20);
                     jobTitleCB.setBackground(Color.WHITE);
@@ -291,6 +307,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
             }
             catch (Exception expt) {
                 JOptionPane.showMessageDialog(this, "Error.");
+                System.out.println("Error [ManagerDashboard: createCustomerBtn] " + "\n\n" + expt + "\n\n");
             }
         }
 
@@ -345,6 +362,8 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 System.out.println("Error [ManagerDashboard: CCBconfirmBtn] " + "\n\n" + expt + "\n\n");
             }
         }
+
+        // REMOVE CUSTOMER OR BANKER
 
         else if (evt.getSource() == removeCustomerBtn || evt.getSource() == removeBankerBtn) {
             removeCustomerBtn.removeActionListener(this);
@@ -424,7 +443,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
         else if (evt.getSource() == RCBinitiateBtn) {
             int vgap = 350;
             int hgapL = 230;
-            int hgapR = 680;
             int width = 300;
 
             String nidEmailT = nidT.getText();
@@ -468,18 +486,18 @@ public class ManagerDashboard extends JFrame implements ActionListener {
             vgap += 100;
 
             // Confirm BUTTON
-            RCBremoveConfirmBtn = new JButton("Confirm");
-            RCBremoveConfirmBtn.setBounds(hgapL, vgap, width, 40);
-            RCBremoveConfirmBtn.setFont(font20);
-            RCBremoveConfirmBtn.setBackground(Color.BLUE);
-            RCBremoveConfirmBtn.setForeground(Color.WHITE);
-            RCBremoveConfirmBtn.addActionListener(this);
-            this.add(RCBremoveConfirmBtn);
+            RCBconfimBtn = new JButton("Confirm");
+            RCBconfimBtn.setBounds(hgapL, vgap, width, 40);
+            RCBconfimBtn.setFont(font20);
+            RCBconfimBtn.setBackground(Color.BLUE);
+            RCBconfimBtn.setForeground(Color.WHITE);
+            RCBconfimBtn.addActionListener(this);
+            this.add(RCBconfimBtn);
 
             this.update(getGraphics());
         }
 
-        else if (evt.getSource() == RCBremoveConfirmBtn) {
+        else if (evt.getSource() == RCBconfimBtn) {
             try {
                 if (pressedBtn == "removeCustomer") {
                     String nidEmail = nidT.getText();
@@ -503,13 +521,13 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                         return;
                     }
                     else {
-                        JOptionPane.showMessageDialog(this, "Error.");
+                        JOptionPane.showMessageDialog(this, "Customer not found");
                     }
                 }
-
+                
                 else if (pressedBtn == "removeBanker") {
                     String nidEmail = nidT.getText();
-
+                    
                     boolean success = false;
                     if (isByNid) {
                         success = bankerList.removeBankerByNid(nidEmail);
@@ -520,7 +538,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
                     if (success) {
                         FileIO.writeBankerList(bankerList);
-
+                        
                         JOptionPane.showMessageDialog(this, "Banker removed successfully");
                         nidT.setText("");
                         nameT.setText("");
@@ -532,10 +550,14 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 }
             } catch (Exception expt) {
                 JOptionPane.showMessageDialog(this, "Error.");
+                System.out.println("Error [ManagerDashboard: RCBconfirmBtn] " + "\n\n" + expt + "\n\n");
+                
             }
 
 
         }
+
+        // CREATE ACCOUNT
 
         else if (evt.getSource() == createAccountBtn) {
             createAccountBtn.setBackground(Color.GRAY);
@@ -594,7 +616,7 @@ public class ManagerDashboard extends JFrame implements ActionListener {
             accountTypeL.setFont(font16b);
             this.add(accountTypeL);
 
-            accountTypeCB = new JComboBox(new String[]{"Saving", "Fixed Deposit"});
+            accountTypeCB = new JComboBox<>(new String[]{"Saving", "Fixed Deposit"});
             accountTypeCB.setBounds(hgapR, vgap+25, width, 40);
             accountTypeCB.setFont(font20);
             accountTypeCB.setBackground(Color.WHITE);
@@ -735,8 +757,11 @@ public class ManagerDashboard extends JFrame implements ActionListener {
 
             } catch (Exception expt) {
                 JOptionPane.showMessageDialog(this, "Error.");
+                System.out.println("Error [ManagerDashboard: createAccountConfirmBtn] " + "\n\n" + expt + "\n\n");
             }
         }
+
+        // REMOVE ACCOUNT
 
         else if (evt.getSource() == removeAccountBtn) {
             removeAccountBtn.setBackground(Color.GRAY);
@@ -800,7 +825,6 @@ public class ManagerDashboard extends JFrame implements ActionListener {
         else if (evt.getSource() == removeAccountInitiateBtn) {
             int vgap = 350;
             int hgapL = 230;
-            int hgapR = 680;
             int width = 300;
 
             String accountNumber = accountNumT.getText();
@@ -855,8 +879,302 @@ public class ManagerDashboard extends JFrame implements ActionListener {
                 }
             } catch (Exception expt) {
                 JOptionPane.showMessageDialog(this, "Error.");
+                System.out.println("Error [ManagerDashboard: removeAccountConfirmBtn] " + "\n\n" + expt + "\n\n");
             }
         }
+
+        // EDIT CUSTOMER OR BANKER INFO
+
+        else if (evt.getSource() == editCustomerInfoBtn || evt.getSource() == editBankerInfoBtn) {
+            removeAllActionListeners();
+            
+            if (evt.getSource() == editCustomerInfoBtn) {
+                editCustomerInfoBtn.setBackground(Color.GRAY);
+
+                // Section title
+                secL = new JLabel("EDIT CUSTOMER INFO");
+                secL.setBounds(490, 290, 300, 36);
+                secL.setFont(font20b);
+                this.add(secL);
+
+                pressedBtn = "editCustomerInfo";
+            }
+            else if (evt.getSource() == editBankerInfoBtn) {
+                editBankerInfoBtn.setBackground(Color.GRAY);
+
+                // Section title
+                secL = new JLabel("EDIT BANKER INFO");
+                secL.setBounds(490, 290, 300, 36);
+                secL.setFont(font20b);
+                this.add(secL);
+
+                pressedBtn = "editBankerInfo";
+            }
+            int vgap = 350;
+            int hgapL = 230;
+            int hgapR = 680;
+            int width = 300;
+
+            // NID 
+            nidL = new JLabel("NID Number or Email");
+            nidL.setBounds(hgapL, vgap, width, 25);
+            nidL.setFont(font16b);
+            this.add(nidL);
+
+            nidT = new JTextField();
+            nidT.setBounds(hgapL, vgap+25, width, 40);
+            nidT.setFont(font20);
+            this.add(nidT);
+
+            // NAME 
+            nameL = new JLabel("Name");
+            nameL.setBounds(hgapR, vgap, width, 25);
+            nameL.setFont(font16b);
+            this.add(nameL);
+
+            nameT = new JTextField();
+            nameT.setBounds(hgapR, vgap+25, width, 40);
+            nameT.setFont(font20);
+            this.add(nameT);
+
+            vgap += 80;
+
+            // BIRTH YEAR 
+            birthYearL = new JLabel("Birth Year");
+            birthYearL.setBounds(hgapL, vgap, width, 25);
+            birthYearL.setFont(font16b);
+            this.add(birthYearL);
+
+            birthYearT = new JTextField();
+            birthYearT.setBounds(hgapL, vgap+25, width, 40);
+            birthYearT.setFont(font20);
+            this.add(birthYearT);
+
+            // MOBILE NUMBER 
+            mobileNumberL = new JLabel("Mobile Number");
+            mobileNumberL.setBounds(hgapR, vgap, width, 25);
+            mobileNumberL.setFont(font16b);
+            this.add(mobileNumberL);
+
+            mobileNumberT = new JTextField();
+            mobileNumberT.setBounds(hgapR, vgap+25, width, 40);
+            mobileNumberT.setFont(font20);
+            this.add(mobileNumberT);
+
+            vgap += 80;
+
+            // ADDRESS
+            addressL = new JLabel("Address");
+            addressL.setBounds(hgapL, vgap, width, 25);
+            addressL.setFont(font16b);
+            this.add(addressL);
+
+            addressT = new JTextField();
+            addressT.setBounds(hgapL, vgap+25, width, 40);
+            addressT.setFont(font20);
+            this.add(addressT);
+
+            // EMAIL
+            emailL = new JLabel("Email");
+            emailL.setBounds(hgapR, vgap, width, 25);
+            emailL.setFont(font16b);
+            this.add(emailL);
+
+            emailT = new JTextField();
+            emailT.setBounds(hgapR, vgap+25, width, 40);
+            emailT.setFont(font20);
+            this.add(emailT);
+
+            if (evt.getSource() == editBankerInfoBtn) {
+                vgap += 80;
+
+                // JOB TITLE 
+                jobTitleL = new JLabel("Job Title");
+                jobTitleL.setBounds(hgapL, vgap, width, 25);
+                jobTitleL.setFont(font16b);
+                this.add(jobTitleL);
+
+                jobTitleCB = new JComboBox<>(new String[] {"", "Cashier", "Manager"});
+                jobTitleCB.setBounds(hgapL, vgap+25, width, 40);
+                jobTitleCB.setFont(font20);
+                this.add(jobTitleCB);
+            }
+
+            // SET ALL FIELD TO NON-EDITABLE
+            nameT.setEditable(false);
+            birthYearT.setEditable(false);
+            mobileNumberT.setEditable(false);
+            addressT.setEditable(false);
+            emailT.setEditable(false);
+
+            // Initiate
+            vgap += 100;
+            ECBinitiatieBtn = new JButton("Initiate");
+            ECBinitiatieBtn.setBounds(hgapL, vgap, width, 40);
+            ECBinitiatieBtn.setFont(font20);
+            ECBinitiatieBtn.setBackground(Color.BLUE);
+            ECBinitiatieBtn.setForeground(Color.WHITE);
+            ECBinitiatieBtn.addActionListener(this);
+            this.add(ECBinitiatieBtn);
+
+            cancelBtn = new JButton("Cancel");
+            cancelBtn.setBounds(hgapR, vgap, width, 40);
+            cancelBtn.setFont(font20);
+            cancelBtn.setBackground(Color.RED);
+            cancelBtn.setForeground(Color.WHITE);
+            cancelBtn.addActionListener(this);
+            this.add(cancelBtn);
+
+            this.update(getGraphics());
+
+        }
+
+        else if (evt.getSource() == ECBinitiatieBtn) {
+            this.remove(ECBinitiatieBtn);
+
+            int vgap = 350;
+            int hgapL = 230;
+            int width = 300;
+
+            String nidT = this.nidT.getText();
+            Customer customerByNid = customerList.getCustomerByNid(nidT);
+            Customer customerByEmail = customerList.getCustomerByEmail(nidT);
+
+            Banker bankerByNid = bankerList.getBankerByNid(nidT);
+            Banker bankerByEmail = bankerList.getBankerByEmail(nidT);
+
+            //SET ALL FIELD TO EDITABLE
+            nameT.setEditable(true);
+            birthYearT.setEditable(true);
+            mobileNumberT.setEditable(true);
+            addressT.setEditable(true);
+            emailT.setEditable(true);
+
+            if (pressedBtn == "editCustomerInfo") {
+                if (customerByNid == null && customerByEmail == null) {
+                    JOptionPane.showMessageDialog(this, "Customer not found");
+                    this.nidT.setText("");
+                    return;
+                }
+                else if (customerByNid != null) {
+                    nameT.setText(customerByNid.getName());
+                    birthYearT.setText(Integer.toString(customerByNid.getBirthYear()));
+                    mobileNumberT.setText(customerByNid.getMobileNumber());
+                    addressT.setText(customerByNid.getAddress());
+                    emailT.setText(customerByNid.getEmail());
+                }
+                else if (customerByEmail != null) {
+                    nameT.setText(customerByEmail.getName());
+                    birthYearT.setText(Integer.toString(customerByEmail.getBirthYear()));
+                    mobileNumberT.setText(customerByEmail.getMobileNumber());
+                    addressT.setText(customerByEmail.getAddress());
+                    emailT.setText(customerByEmail.getEmail());
+                }
+            }
+            else if (pressedBtn == "editBankerInfo") {
+                if (bankerByNid == null && bankerByEmail == null) {
+                    JOptionPane.showMessageDialog(this, "Banker not found");
+                    this.nidT.setText("");
+                    return;
+                }
+                else if (bankerByNid != null) {
+                    nameT.setText(bankerByNid.getName());
+                    birthYearT.setText(Integer.toString(bankerByNid.getBirthYear()));
+                    mobileNumberT.setText(bankerByNid.getMobileNumber());
+                    addressT.setText(bankerByNid.getAddress());
+                    emailT.setText(bankerByNid.getEmail());
+                    jobTitleCB.setSelectedItem(bankerByNid.getJobTitle());
+                }
+                else if (bankerByEmail != null) {
+                    nameT.setText(bankerByEmail.getName());
+                    birthYearT.setText(Integer.toString(bankerByEmail.getBirthYear()));
+                    mobileNumberT.setText(bankerByEmail.getMobileNumber());
+                    addressT.setText(bankerByEmail.getAddress());
+                    emailT.setText(bankerByEmail.getEmail());
+                    jobTitleCB.setSelectedItem(bankerByEmail.getJobTitle());
+                }
+                vgap += 80;
+            }
+            
+            // CONFIRM BUTTON
+            vgap += 260;
+            ECBconfirmBtn = new JButton("Confirm");
+            ECBconfirmBtn.setBounds(hgapL, vgap, width, 40);
+            ECBconfirmBtn.setFont(font20);
+            ECBconfirmBtn.setBackground(Color.BLUE);
+            ECBconfirmBtn.setForeground(Color.WHITE);
+            ECBconfirmBtn.addActionListener(this);
+            this.add(ECBconfirmBtn);
+
+            this.update(getGraphics());
+        }
+
+        else if (evt.getSource() == ECBconfirmBtn) {
+            try {
+                String nidT = this.nidT.getText();
+                String nameT = this.nameT.getText();
+                int birthYearT = Integer.parseInt(this.birthYearT.getText());
+                String mobileNumberT = this.mobileNumberT.getText();
+                String addressT = this.addressT.getText();
+                String emailT = this.emailT.getText();
+
+                if (pressedBtn == "editCustomerInfo") {
+                    Customer customerByNid = customerList.getCustomerByNid(nidT);
+                    Customer customerByEmail = customerList.getCustomerByEmail(nidT);
+
+                    if (customerByNid != null) {
+                        customerByNid.setName(nameT);
+                        customerByNid.setBirthYear(birthYearT);
+                        customerByNid.setMobileNumber(mobileNumberT);
+                        customerByNid.setAddress(addressT);
+                        customerByNid.setEmail(emailT);
+                    }
+                    else if (customerByEmail != null) {
+                        customerByEmail.setName(nameT);
+                        customerByEmail.setBirthYear(birthYearT);
+                        customerByEmail.setMobileNumber(mobileNumberT);
+                        customerByEmail.setAddress(addressT);
+                        customerByEmail.setEmail(emailT);
+                    }
+
+                    FileIO.writeCustomerList(customerList);
+                    JOptionPane.showMessageDialog(this, "Customer info updated successfully");
+                }
+                else if (pressedBtn == "editBankerInfo") {
+                    Banker bankerByNid = bankerList.getBankerByNid(nidT);
+                    Banker bankerByEmail = bankerList.getBankerByEmail(nidT);
+
+                    if (bankerByNid != null) {
+                        bankerByNid.setName(nameT);
+                        bankerByNid.setBirthYear(birthYearT);
+                        bankerByNid.setMobileNumber(mobileNumberT);
+                        bankerByNid.setAddress(addressT);
+                        bankerByNid.setEmail(emailT);
+                        bankerByNid.setJobTitle(jobTitleCB.getSelectedItem().toString());
+                    }
+                    else if (bankerByEmail != null) {
+                        bankerByEmail.setName(nameT);
+                        bankerByEmail.setBirthYear(birthYearT);
+                        bankerByEmail.setMobileNumber(mobileNumberT);
+                        bankerByEmail.setAddress(addressT);
+                        bankerByEmail.setEmail(emailT);
+                        bankerByEmail.setJobTitle(jobTitleCB.getSelectedItem().toString());
+                    }
+
+                    FileIO.writeBankerList(bankerList);
+                    JOptionPane.showMessageDialog(this, "Banker info updated successfully");
+                }
+
+                this.dispose();
+                new ManagerDashboard(customerList, bankerList, loginPage);
+
+            } catch (Exception expt) { 
+                JOptionPane.showMessageDialog(this, "Error.");
+                System.out.println("Error [ManagerDashboard: ECBconfirmBtn] " + "\n\n" + expt + "\n\n");
+            }
+        }
+
+        // CANCEL BUTTON
 
         else if (evt.getSource() == cancelBtn) {
             this.dispose();
@@ -864,5 +1182,4 @@ public class ManagerDashboard extends JFrame implements ActionListener {
         }
     
     }
-
 }
